@@ -57,3 +57,62 @@ Use Northwind_SPP;
 --Select FirstName,LastName,Title,Birthdate
 --from Employees
 --Order by BirthDate;
+
+--11. From Employees, show FirstName, LastName, Title and Birthdate - but don't include the time portion.
+--Select FirstName,LastName,Title,Convert(date,Birthdate)
+--from Employees
+--Order by BirthDate;
+
+--12. From Employees, FirstName, LastName, then new column concating with a space
+--Select FirstName,LastName, Concat(FirstName,' ',LastName) FullName
+--from Employees;
+
+--13. From OrderDetails table, Show OrderID, ProductID, UnitPrice, Quantity, then a TotalPrice Field that
+--is Quantity*UnitPrice. Order by OrderID and ProductID.
+
+--Select OrderID, ProductID, UnitPrice, Quantity, (UnitPrice*Quantity) TotalPrice
+--From OrderDetails
+--Order by 1,2;
+
+--14. How many customers are in the Customers table.
+
+--Select Count(*) TotalCustomers
+--From Customers;
+
+----15. Show the date of the first order in the Orders Table
+--Select Min(OrderDate) as FirstOrder
+--From Orders;
+
+-- 16. Show countries where Northwind Co. has customers.
+--Select Distinct Country
+--from Customers;
+---- or
+--Select Country
+--From Customers
+--group by Country;
+
+--17. Show the different values in the ContactTitles column of the Customers table. Include their count.
+
+--Select ContactTitle, Count(*) as Total
+--From Customers
+--Group by ContactTitle
+--Order by 2 Desc;
+
+-- 18. For each Product, show the associated Supplier. Show ProductID, ProductName, and CompanyName of
+-- the Supplier. Sort by ProductID.
+
+--Select P.ProductID, P.ProductName, S.CompanyName
+--From Products P
+--JOIN Suppliers S
+--ON P.SupplierID = S.SupplierID
+--Order by 1;
+
+--19. Show a list of Orders, and include the Shipper used. Show OrderID, OrderDate (DateOnly), and
+-- CompanyName of Shipper, sorted by OrderID, and show only rows with OrderID less than 10270
+
+--Select O.OrderID, O.OrderDate, S.CompanyName
+--From Orders O
+--Join Shippers S
+--ON O.ShipVia = S.ShipperID
+--Where O.OrderID < 10270
+Order by 1
