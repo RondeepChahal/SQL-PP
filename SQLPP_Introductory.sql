@@ -3,52 +3,48 @@ Use Northwind_SPP;
 
 -- Introductory Problems
 
--- 1. Return all fields from all the shippers
--- select * from Shippers;
+--1. Return all fields from all the shippers
+--select * from Shippers;
 
--- 2. Get 2 columns from the Categories table - CategoryName and Description
-
--- Select * from Categories;
+--2. Get 2 columns from the Categories table - CategoryName and Description
+--Select * from Categories;
 
 --Select CategoryName, Description
 --From Categories;
 
--- 3. Show FirstName, LastName, and HireDate of all employees with Title of Sales Representative
-
+--3. Show FirstName, LastName, and HireDate of all employees with Title of Sales Representative
 --Select FirstName, LastName, HireDate
 --from Employees
 --Where Title = 'Sales Representative';
 
--- 4. Same as above but also only those in United States
-
+--4. Same as above but also only those in United States
 --Select FirstName, LastName, HireDate
 --from Employees
 --Where Title = 'Sales Representative'
---	and Country = 'USA';
+--and Country = 'USA';
 
--- 5. All orders by EmployeeID 5
-
+--5. All orders by EmployeeID 5
 --Select OrderID, OrderDate
 --from Orders
 --where employeeid = 5;
 
--- 6. From Suppliers Table - show SupplierID, ContactName, ContactTitle and suppliers whose contacttitle is NOT marketing Manager
+--6. From Suppliers Table - show SupplierID, ContactName, ContactTitle and suppliers whose contacttitle is NOT marketing Manager
 --Select SupplierID, ContactName, ContactTitle
 --From Suppliers
 --Where ContactTitle != 'Marketing Manager';
 
--- 7. Products table - ProductID and ProductName where the ProductName includes the string 'queso'
+--7. Products table - ProductID and ProductName where the ProductName includes the string 'queso'
 --Select ProductID, ProductName
 --From Products
 --Where ProductName like '%queso%';
 
--- 8. From Orders, show OrderID, CustomerID, ShipCountry where the ShipCountry is either France or Belgium.
+--8. From Orders, show OrderID, CustomerID, ShipCountry where the ShipCountry is either France or Belgium.
 --Select OrderID, CustomerID, ShipCountry
 --from Orders
 --Where ShipCountry in ('France','Belgium');
 
 --9. From Orders, show OrderID, CustomerID, ShipCountry where the ShipCountry is in Latin America (Brazil, Mexico, Argentina,
--- and Venezuela).
+--and Venezuela).
 --Select OrderID, CustomerID, ShipCountry
 --from Orders
 --Where ShipCountry in ('Brazil','Mexico','Argentina','Venezuela');
@@ -69,21 +65,19 @@ Use Northwind_SPP;
 
 --13. From OrderDetails table, Show OrderID, ProductID, UnitPrice, Quantity, then a TotalPrice Field that
 --is Quantity*UnitPrice. Order by OrderID and ProductID.
-
 --Select OrderID, ProductID, UnitPrice, Quantity, (UnitPrice*Quantity) TotalPrice
 --From OrderDetails
 --Order by 1,2;
 
 --14. How many customers are in the Customers table.
-
 --Select Count(*) TotalCustomers
 --From Customers;
 
-----15. Show the date of the first order in the Orders Table
+--15. Show the date of the first order in the Orders Table
 --Select Min(OrderDate) as FirstOrder
 --From Orders;
 
--- 16. Show countries where Northwind Co. has customers.
+--16. Show countries where Northwind Co. has customers.
 --Select Distinct Country
 --from Customers;
 ---- or
@@ -92,15 +86,13 @@ Use Northwind_SPP;
 --group by Country;
 
 --17. Show the different values in the ContactTitles column of the Customers table. Include their count.
-
 --Select ContactTitle, Count(*) as Total
 --From Customers
 --Group by ContactTitle
 --Order by 2 Desc;
 
--- 18. For each Product, show the associated Supplier. Show ProductID, ProductName, and CompanyName of
--- the Supplier. Sort by ProductID.
-
+--18. For each Product, show the associated Supplier. Show ProductID, ProductName, and CompanyName of
+--the Supplier. Sort by ProductID.
 --Select P.ProductID, P.ProductName, S.CompanyName
 --From Products P
 --JOIN Suppliers S
@@ -108,11 +100,10 @@ Use Northwind_SPP;
 --Order by 1;
 
 --19. Show a list of Orders, and include the Shipper used. Show OrderID, OrderDate (DateOnly), and
--- CompanyName of Shipper, sorted by OrderID, and show only rows with OrderID less than 10270
-
+--CompanyName of Shipper, sorted by OrderID, and show only rows with OrderID less than 10270
 --Select O.OrderID, O.OrderDate, S.CompanyName
 --From Orders O
 --Join Shippers S
 --ON O.ShipVia = S.ShipperID
 --Where O.OrderID < 10270
-Order by 1
+--Order by 1
