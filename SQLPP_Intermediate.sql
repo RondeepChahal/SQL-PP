@@ -82,3 +82,13 @@ Use Northwind_SPP;
 --Where O.OrderID is Null;
 
 --31. Show customers who have never placed an order with employeeid 4
+--Select distinct C.CustomerID, employeeID
+--From Customers C
+--Left Join Orders O
+--ON C.CustomerID = O.CustomerID
+--Where C.CustomerID Not In
+--	(Select C.CustomerID
+--	From Customers C
+--	Join Orders O
+--	ON C.CustomerID = O.CustomerID
+--	Where EmployeeID = 4);
