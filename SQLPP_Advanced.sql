@@ -94,3 +94,121 @@ Use Northwind_SPP;
 --	Having Count(Quantity) >1) as Small 
 --ON Small.OrderID = OD.OrderID;
 
+-- 41. Find the orders arriving late. Sort by OrderID. Columns OrderID, OrderDate, RequiredDate,
+-- ShippedDate.
+--Select O.OrderID, O.OrderDate, O.RequiredDate, O.ShippedDate
+--From Orders O
+--Where O.ShippedDate >= O.RequiredDate;
+
+-- 42. Salespeople with the most late orders.
+--Select O.EmployeeID, E.LastName, Count(O.OrderID) as NumLate
+--From Orders O
+--Join Employees E
+--ON O.EmployeeID = E.EmployeeID
+--Where O.ShippedDate >= O.RequiredDate
+--Group by O.EmployeeID, E.LastName
+--Order by 3 desc;
+
+-- 43. Salespeople with most late orders, and number of their total orders, and show null row. Use CTE.
+
+--With AllData (EmployeeID, LastName, TotalOrders) as
+--		(Select O.EmployeeID, E.LastName, Count(O.OrderID) as AllOrders
+--		From Orders O
+--		Join Employees E
+--		ON O.EmployeeID = E.EmployeeID
+--		Group by O.EmployeeID, E.LastName),
+--	LateData (EmployeeID, LastName, LateOrders) as
+--		(Select O.EmployeeID, E.LastName, Count(O.OrderID) as LateOrders
+--		From Orders O
+--		Join Employees E
+--		ON O.EmployeeID = E.EmployeeID
+--		Where O.ShippedDate >= O.RequiredDate
+--		Group by O.EmployeeID, E.LastName)
+--Select AllData.*, LateData.LateOrders
+--From AllData
+--Join LateData
+--ON AllData.EmployeeID = LateData.EmployeeID
+--Order by 1;
+
+-- 44. Salespeople with most late orders, and number of their total orders, and show null row.
+--Select O.EmployeeID, E.LastName, Count(O.OrderID) as AllOrders, LateData.LateOrders
+--From Orders O
+--Join Employees E
+--ON O.EmployeeID = E.EmployeeID
+--Left Join
+--	(Select O.EmployeeID, E.LastName, Count(O.OrderID) as LateOrders
+--	From Orders O
+--	Join Employees E
+--	ON O.EmployeeID = E.EmployeeID
+--	Where O.ShippedDate >= O.RequiredDate
+--	Group by O.EmployeeID, E.LastName) LateData
+--On O.EmployeeID =LateData.EmployeeID
+--Group by O.EmployeeID, E.LastName, LateData.LateOrders
+--Order by 1;
+
+ --45. Now do the same, but replace the null with 0.
+--With AllData (EmployeeID, LastName, TotalOrders) as
+--		(Select O.EmployeeID, E.LastName, Count(O.OrderID) as AllOrders
+--		From Orders O
+--		Join Employees E
+--		ON O.EmployeeID = E.EmployeeID
+--		Group by O.EmployeeID, E.LastName),
+--	LateData (EmployeeID, LastName, LateOrders) as
+--		(Select O.EmployeeID, E.LastName, Count(O.OrderID) as LateOrders
+--		From Orders O
+--		Join Employees E
+--		ON O.EmployeeID = E.EmployeeID
+--		Where O.ShippedDate >= O.RequiredDate
+--		Group by O.EmployeeID, E.LastName)
+--Select AllData.*, IsNull(LateData.LateOrders,0) as LateOrders
+--From AllData
+--Left Join LateData
+--ON AllData.EmployeeID = LateData.EmployeeID
+--Order by 1;
+
+--46. Now calculate Late as Percent of Total.
+--With AllData (EmployeeID, LastName, TotalOrders) as
+--		(Select O.EmployeeID, E.LastName, Count(O.OrderID) as AllOrders
+--		From Orders O
+--		Join Employees E
+--		ON O.EmployeeID = E.EmployeeID
+--		Group by O.EmployeeID, E.LastName),
+--	LateData (EmployeeID, LastName, LateOrders) as
+--		(Select O.EmployeeID, E.LastName, Count(O.OrderID) as LateOrders
+--		From Orders O
+--		Join Employees E
+--		ON O.EmployeeID = E.EmployeeID
+--		Where O.ShippedDate >= O.RequiredDate
+--		Group by O.EmployeeID, E.LastName)
+--Select AllData.*, IsNull(LateData.LateOrders,0) as LateOrders, IsNull((Cast(LateOrders as Float) / AllData.TotalOrders),0) as PercentLate
+--From AllData
+--Left Join LateData
+--ON AllData.EmployeeID = LateData.EmployeeID
+--Order by 1;
+
+-- 47. Now calculate Late as Percent of Total, and keep only first 2 decimals.
+--With AllData (EmployeeID, LastName, TotalOrders) as
+--		(Select O.EmployeeID, E.LastName, Count(O.OrderID) as AllOrders
+--		From Orders O
+--		Join Employees E
+--		ON O.EmployeeID = E.EmployeeID
+--		Group by O.EmployeeID, E.LastName),
+--	LateData (EmployeeID, LastName, LateOrders) as
+--		(Select O.EmployeeID, E.LastName, Count(O.OrderID) as LateOrders
+--		From Orders O
+--		Join Employees E
+--		ON O.EmployeeID = E.EmployeeID
+--		Where O.ShippedDate >= O.RequiredDate
+--		Group by O.EmployeeID, E.LastName)
+--Select AllData.*, IsNull(LateData.LateOrders,0) as LateOrders,
+--	IsNull(Cast(Cast(LateOrders as Float) / AllData.TotalOrders as Decimal(16,2)),0) as PercentLate
+--From AllData
+--Left Join LateData
+--ON AllData.EmployeeID = LateData.EmployeeID
+--Order by 1;
+
+--- VALUABLE - when things get hairy with theoreticals and functions,
+--- use an actual value to help you debug)
+--Select Cast(Cast(3 as Float) / 123 as Decimal(16,2));
+
+-- 48. 
