@@ -61,8 +61,18 @@ Use Northwind_SPP;
 --	Group by OrderID, Quantity
 --	Having Count(Quantity) >1) as Small;
 
---INCOMPLETE--
 -- 39. Above but with details for those orderIDs,  using common table expressions - https://technet.microsoft.com/en-us/library/ms175972.aspx
+--With Small (OrderID,Quantity,Counted) as
+--	(Select OrderID, Quantity, Count(Quantity) as Counted
+--	From OrderDetails
+--	Where Quantity >= 60
+--	Group by OrderID, Quantity
+--	Having Count(Quantity) >1)
+--Select distinct OD.*
+--From OrderDetails OD
+--Join Small
+--ON OD.OrderID = Small.OrderID;
+
 --Select distinct OD.*
 --From OrderDetails OD
 --JOIN
