@@ -211,4 +211,56 @@ Use Northwind_SPP;
 --- use an actual value to help you debug)
 --Select Cast(Cast(3 as Float) / 123 as Decimal(16,2));
 
--- 48. 
+-- 48. Organize customers into groups based on how much they ordered in spend in 2016. Groups are 0-1000,1000-5000,
+-- 5000-10000, and 10000+. Identify them as Low, Medium, High, and Very High. Ignore customers who ordered
+-- 0 in 2016. Columns desired: CustomerID, CompanyName, Total Order Amount, Customer Group
+
+--With TotalData (CustomerID, TotalOrderAmount) as
+--	(Select O.CustomerID
+--		,Sum(OD.UnitPrice*Quantity) as TotalOrderAmount
+--	From Orders O
+--	JOIN OrderDetails OD
+--	on O.OrderID = OD.OrderID
+--	Where Year(OrderDate) = 2016
+--	Group by O.CustomerID)
+--Select TotalData.CustomerID
+--	, TotalData.TotalOrderAmount
+--	,(Case when TotalData.TotalOrderAmount < 1000 then 'Low'
+--	when TotalData.TotalOrderAmount < 5000 then 'Medium'
+--	when TotalData.TotalOrderAmount < 10000 then 'High'
+--	when TotalData.TotalOrderAmount >= 10000 then 'Very High'
+--	End) as CustomerGroup
+--From TotalData;
+
+--49. Freebie (Using Between creates nulls for the integers that mark the boundaries between groups and
+-- using boolean operators doesn't. We solved it most efficiently and so didn't have any null value).
+
+--50. Rework the top, Get a count of customers in each group, and calculate the percent of customers
+-- in each group.
+--With TotalData (CustomerID, TotalOrderAmount) as
+--	(Select O.CustomerID
+--		,Sum(OD.UnitPrice*Quantity) as TotalOrderAmount
+--	From Orders O
+--	JOIN OrderDetails OD
+--	on O.OrderID = OD.OrderID
+--	Where Year(OrderDate) = 2016
+--	Group by O.CustomerID)
+--Select (Case when TotalData.TotalOrderAmount < 1000 then 'Low'
+--	when TotalData.TotalOrderAmount < 5000 then 'Medium'
+--	when TotalData.TotalOrderAmount < 10000 then 'High'
+--	when TotalData.TotalOrderAmount >= 10000 then 'Very High'
+--	End) as CustomerGroup
+--	, Count(TotalData.CustomerID) as TotalInGroup
+--	, Cast(Count(TotalData.CustomerID) as Float)/(Select Count(*) from TotalData) as PercentInGroup
+--From TotalData
+--Group by (Case when TotalData.TotalOrderAmount < 1000 then 'Low'
+--	when TotalData.TotalOrderAmount < 5000 then 'Medium'
+--	when TotalData.TotalOrderAmount < 10000 then 'High'
+--	when TotalData.TotalOrderAmount >= 10000 then 'Very High'
+--	End)
+--Order by 2 Desc;
+
+-- 51. Do the top but use table CustomerGroupThresholds, to define the categories.
+
+Select *
+From CustomerGroupThresholds;
