@@ -341,4 +341,18 @@ Use Northwind_SPP;
 --Order by 1;
 
 --57. Solve the above, using window functions. 
--- read up on window functions to solve - https://www.sqlshack.com/use-window-functions-sql-server/
+-- Good reading on window functions to help solve - https://www.sqlshack.com/use-window-functions-sql-server/
+
+--With NextData (CustomerID, OrderDate, NextOrderDate) as
+--	(Select
+--		CustomerID
+--		,Cast(OrderDate as Date) as OrderDate
+--		,Cast(LEAD(OrderDate,1) Over (Partition by CustomerID order by CustomerID, OrderDate) as Date) as NextOrderDate
+--	From Orders O)
+--Select 
+--	NextData.CustomerID
+--	,NextData.OrderDate
+--	,NextData.NextOrderDate
+--	,DateDiff(day,NextData.OrderDate, NextData.NextOrderDate) as DayDiff
+--From NextData
+--Where DateDiff(day,NextData.OrderDate, NextData.NextOrderDate) <=5;
