@@ -261,6 +261,84 @@ Use Northwind_SPP;
 --Order by 2 Desc;
 
 -- 51. Do the top but use table CustomerGroupThresholds, to define the categories.
+--With TotalData (CustomerID, TotalOrderAmount) as
+--	(Select O.CustomerID
+--		,Sum(OD.UnitPrice*Quantity) as TotalOrderAmount
+--	From Orders O
+--	JOIN OrderDetails OD
+--	on O.OrderID = OD.OrderID
+--	Where Year(OrderDate) = 2016
+--	Group by O.CustomerID)
+--Select TotalData.CustomerID
+--	, TotalOrderAmount
+--	, C.CompanyName
+--	, (Select CustomerGroupName
+--		From CustomerGroupThresholds
+--		Where TotalOrderAmount between RangeBottom and RangeTop) as CustomerGroupName
+--From TotalData
+--Join Customers C
+--On TotalData.CustomerID = C.CustomerID;
 
-Select *
-From CustomerGroupThresholds;
+-- 52. Show a list of all countries where suppliers and/or customers are based.
+--Select Country
+--from Suppliers
+--Union
+--Select Country
+--From Customers;
+
+--- 53. Now show it as two columns 
+--Select Distinct S.Country, C.Country
+--From Suppliers S
+--Full Outer Join Customers C
+--ON S.Country = C.Country
+--Order by 2,1;
+
+-- 54. Show CountryName, Total # Suppliers, and Total # Customers
+--With Countries (Country) as
+--	(Select Country
+--	from Suppliers
+--	Union
+--	Select Country
+--	From Customers)
+--Select C.Country
+--	, (Select Count(S.Country)
+--		From Suppliers S 
+--		Where S.Country = C.Country) as TotalSuppliers
+--	, (Select Count(Cust.Country) 
+--		From Customers Cust
+--		Where Cust.Country=C.Country) as TotalCustomers
+--From Countries C;
+
+--55.  Show details for first order in each particular country, Ordered by OrderID
+--With Countries (Country) as
+--		(Select Country
+--		from Suppliers
+--		Union
+--		Select Country
+--		From Customers),
+--	FirstOrder (Country, Date) as
+--		(Select Countries.Country, Min(O.OrderDate) as FirstOrderDate
+--		From Countries
+--		Join Orders O
+--		ON Countries.Country = O.ShipCountry
+--		Group by Countries.Country)
+--Select Country, Date, O.OrderID, Cast(O.OrderDate as Date) as OrderDate
+--From FirstOrder
+--Left Join Orders O
+--ON O.OrderDate = Date
+--Order by 1;
+
+-- 56. Show orders from customers who have another order in a 5 day period.
+--Select O.CustomerID,
+--		O2.OrderID as InitialOrderID, CAST(O2.OrderDate as Date) as InitialOrderDate, 
+--		O.OrderID as NextOrderID, CAST(O.OrderDate as Date) as NextOrderDate,
+--		DateDiff(day,O2.OrderDate, O.OrderDate) as DayDiff
+--From Orders O
+--Join Orders O2
+--On O.CustomerID = O2.CustomerID
+--Where DateDiff(day,O2.OrderDate, O.OrderDate) <= 5
+--	and O.OrderID > O2.OrderID
+--Order by 1;
+
+--57. Solve the above, using window functions. 
+-- read up on window functions to solve - https://www.sqlshack.com/use-window-functions-sql-server/
